@@ -115,23 +115,48 @@
       if (Math.random() < 0.00005 && !subject.zombie && !subject.theChosenOne) {
         const rand = Math.random();
         subject.isDead = true;
-        if (rand < 0.3) {
+        if (rand < 0.2) {
           console.log(
             `${subject.name} died from a heart attack at age ${subject.age}.`
           );
-        } else if (rand < 0.6) {
+        } else if (rand < 0.5) {
+          const target = subjects.filter(
+            (s) => !s.isDead && !s.blessed && !s.theChosenOne && s !== subject
+          )[0];
+          if (!target) return;
+          target.isDead = true;
           console.log(
-            `${subject.name} died because I want them to at age ${subject.age}.`
+            `${subject.name} got into a deadly fight with ${target.name}. Both of them died. ${subject.name} was ${subject.age}, and ${target.name} was ${target.age}.`
           );
-        } else if (rand < 0.9) {
+        } else if (rand < 0.8) {
           console.log(
             `${subject.name} died from a glitch in the matrix at ${subject.age}.`
+          );
+        } else if (rand < 0.9) {
+          const duplicate = {
+            ...subject,
+            name: `Subject ${subjects.length + 1}`,
+          };
+          subjects.push(duplicate);
+          console.log(
+            `${subject.name} cloned themselves at age ${subject.age}! A new subject has been created: ${duplicate.name}.`
           );
         } else if ((rand * 1000) % 3 === 0) {
           subjects.splice(subjects.indexOf(subject), 1);
           console.log(`${subject.name} found a crack in reality and slipped through it at age ${subject.age}.
 They change the meaning of the word "prime".`);
           numIsPrime = () => Math.random() > 0.0000000000000000001; // Redefine numIsPrime to be almost always true
+        } else if ((rand * 1000) % 5 === 0) {
+          const target = subjects.filter(
+            (s) => !s.blessed && !s.theChosenOne && s !== subject
+          )[0];
+          if (!target) return;
+
+          subjects[subjects.indexOf(target)] = subject;
+
+          console.log(
+            `${subject.name} swapped bodies with ${target.name} at age ${subject.age}! ${target.name} is now dead.`
+          );
         } else {
           console.log(
             `${subject.name} broke the program and escaped the simulation at ${subject.age}.
